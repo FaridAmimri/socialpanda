@@ -6,22 +6,43 @@ import { Button } from '@/components/ui/button'
 import { useUser } from '@clerk/nextjs'
 import { Image, Send, Video } from 'lucide-react'
 import { useState, useContext } from 'react'
+import { useToast } from '@/components/ui/use-toast'
 
 const WritePost = () => {
   const { user } = useUser()
-  const [userPost, setUserPost] = useState()
+  const [inputPost, setInputPost] = useState()
   const { userDetail, setUserDetail } = useContext(UserContext)
+  const { toast } = useToast()
 
   const handlePost = () => {
     const data = {
-      text: userPost,
+      text: inputPost,
       createdAt: Date.now().toString(),
       createdBy: userDetail._id
     }
-    GlobalApi.createPost(data).then((res) => {
-      console.log(res.data)
-    })
+    GlobalApi.createPost(data).then(
+      (res) => {
+        setInputPost('')
+        if (res) {
+          toast({
+            title: 'Awesome!',
+            description: 'Post Published successfully',
+            variant: 'success'
+          })
+        }
+      },
+      (error) => {
+        if (error) {
+          toast({
+            title: 'Oups!',
+            description: 'Something went wrong',
+            variant: 'destructive'
+          })
+        }
+      }
+    )
   }
+
   return (
     <div>
       <h2 className='text-[30px] font-medium text-gray-600'>
@@ -36,7 +57,8 @@ const WritePost = () => {
           <textarea
             className='outline-none w-full'
             placeholder="What's New"
-            onChange={(e) => setUserPost(e.target.value)}
+            value={inputPost}
+            onChange={(e) => setInputPost(e.target.value)}
           />
         </div>
         <div className='mt-2 flex justify-between'>
@@ -50,7 +72,7 @@ const WritePost = () => {
           </div>
           <Button
             className='bg-blue-500 rounded-lg gap-2 hover:bg-blue-700 '
-            disabled={!userPost?.length}
+            disabled={!inputPost?.length}
             onClick={() => handlePost()}
           >
             <Send className='h-4 w-4' />
