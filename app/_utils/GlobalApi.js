@@ -8,5 +8,7 @@ const axiosClient = axios.create({
 })
 
 const createUser = (data) => axiosClient.post('/user', data)
+const getUserByEmail = (email) => axiosClient.get(`/user/${email}`)
+const createPost = (data) => axiosClient.post('/post', data)
 
-export default { createUser }
+export default { createUser, getUserByEmail, createPost }
