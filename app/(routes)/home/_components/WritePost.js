@@ -8,7 +8,7 @@ import { Image, Send, Video } from 'lucide-react'
 import { useState, useContext } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 
-const WritePost = () => {
+const WritePost = ({ getAllPost }) => {
   const { user } = useUser()
   const [inputPost, setInputPost] = useState()
   const { userDetail, setUserDetail } = useContext(UserContext)
@@ -24,6 +24,7 @@ const WritePost = () => {
       (res) => {
         setInputPost('')
         if (res) {
+          getAllPost()
           toast({
             title: 'Awesome!',
             description: 'Post Published successfully',
