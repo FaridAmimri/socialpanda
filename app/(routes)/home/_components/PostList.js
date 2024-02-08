@@ -3,13 +3,13 @@
 import PostItem from './PostItem'
 import { Skeleton } from '@/components/ui/skeleton'
 
-const PostList = ({ postList }) => {
+const PostList = ({ postList, updatePostList }) => {
   return (
     <div>
       {postList ? (
         postList.map((post) => (
           <div key={post._id}>
-            <PostItem post={post} />
+            <PostItem post={post} updatePostList={() => updatePostList()} />
           </div>
         ))
       ) : (
